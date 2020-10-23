@@ -4,11 +4,11 @@
 
 CREATE DATABASE notepad;
 
-CREATE USER 'pjc1991'@'localhost' IDENTIFIED BY 'pjc1991'; 
-
-GRANT ALL PRIVILEGES ON notepad.* TO pjc1991;
-
+CREATE OR REPLACE USER 'pjc1991'@'localhost' IDENTIFIED BY 'pjc1991'; 
+GRANT ALL PRIVILEGES ON notepad.* TO 'pjc1991'@'localhost';
 FLUSH PRIVILEGES;
+
+SHOW GRANTS FOR 'pjc1991'@'localhost';
 
 DROP TABLE IF EXISTS `NOTE`;
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/header :: header"></head>
+
+  <body>
+    <div class="container">
+      <div th:replace="fragments/top :: top"></div>
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-2 col-sm-0"></div>
+          <div class="col-lg-8 col-sm-12">
+            <form action="/insertNote.do">
+              <div class="input-group my-3">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="n_title"
+                  placeholder="제목..."
+                />
+              </div>
+              <div class="input-group my-3">
+              <textarea
+                class="form-control"
+                name="n_content"
+                cols="30"
+                rows="10"
+                placeholder="내용... "
+              >
+              </textarea>
+            </div>
+            <div class="input-group my-3">
+                <input type="submit" value="입력" class="form-control btn btn-primary">
+            </div>
+            </form>
+
+            <table class="table">
+              <tr>
+                <th>노트 번호</th>
+                <th>노트 제목</th>
+                <th>노트 내용</th>
+                <th>노트 상태</th>
+              </tr>
+              <tr th:each="item : ${noteList}">
+                <td th:text="${item.n_idx}"></td>
+                <td th:text="${item.n_title}"></td>
+                <td th:text="${item.n_content}"></td>
+                <td th:text="${item.n_status}"></td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-lg-2 col-sm-0"></div>
+        </div>
+      </div>
+      <div th:replace="fragments/footer :: footer"></div>
+    </div>
+  </body>
+</html>

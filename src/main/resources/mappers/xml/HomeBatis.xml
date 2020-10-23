@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="notepad">
+  <select id="loginPro" resultType="MemberDto">
+    SELECT *
+    FROM member
+    WHERE 
+        m_id = #{m_id}
+    AND
+        m_pw = #{m_pw}
+  </select>
+
+  <select id="noteList" parameterType="MemberDto" resultType="NoteDto">
+    SELECT *
+    FROM note
+    WHERE 
+      m_id = #{m_id}
+  </select>
+</mapper>

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
+  <body>
     <div th:fragment="top">
-        <div class="row">
-            <p>top test</p>
-        </div>
-
+      <div class="row">
+        <p  th:if="${session['MemberDto'] != null}"
+            class="text-light">
+          현재 로그인 중인 아이디 :
+          <span th:text="${session['MemberDto'].m_id}">없음</span>
+        </p>
+      </div>
     </div>
-</body>
+  </body>
 </html>

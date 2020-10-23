@@ -2,12 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head th:replace="fragments/header :: header"></head>
 
-  <body>
+  <body class="bg-dark">
     <div class="container">
       <div th:replace="fragments/top :: top"></div>
       <div class="content">
         <div class="row">
-          <p th:text="${msg }">Hello, World!</p>
+            <div class="col"></div>
+            <div class="col">
+                <form name="frm" action="/loginPro.do">
+                <div class="form-group">
+                    <label  for="InputId">
+                        <b class="text-light">ID : </b>
+                    </label>
+                    <input  class="form-control my-3" id="InputId" type="text"
+                            name="m_id" placeholder="ID를 입력해주세요.">
+                    <label  for="InputPw">
+                        <b class="text-light">Password : </b>
+                    </label>
+                    <input  class="form-control my-3" id="InputPw" type="password"
+                            name="m_pw" placeholder="Password를 입력해주세요.">
+                    <input  type="submit" class="btn btn-primary my-3" value="로그인">
+                </div>
+                </form>
+            </div>
+            <div class="col"></div>
         </div>
       </div>
       <div th:replace="fragments/footer :: footer"></div>
