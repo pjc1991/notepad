@@ -1,0 +1,47 @@
+# MySQL
+# When you initiate your MariaDB first time.
+# https://www.erdcloud.com/d/wBfCvkr6r7HhnRQid
+
+CREATE DATABASE notepad;
+
+CREATE USER 'pjc1991'@'localhost' IDENTIFIED BY 'pjc1991'; 
+
+GRANT ALL PRIVILEGES ON notepad.* TO pjc1991;
+
+FLUSH PRIVILEGES;
+
+DROP TABLE IF EXISTS `NOTE`;
+
+CREATE TABLE `NOTE` (
+	`n_idx`	INT	NOT NULL,
+	`m_id`	VARCHAR	NOT NULL,
+	`n_title`	VARCHAR	NULL,
+	`n_contemnt`	VARCHAR	NULL,
+	`n_status`	INT	NULL
+);
+
+DROP TABLE IF EXISTS `MEMBER`;
+
+CREATE TABLE `MEMBER` (
+	`m_id`	VARCHAR	NOT NULL,
+	`m_pw`	VARCHAR	NULL,
+	`m_mail`	VARCHAR	NULL,
+	`m_admin`	INT	NULL
+);
+
+ALTER TABLE `NOTE` ADD CONSTRAINT `PK_NOTE` PRIMARY KEY (
+	`n_idx`,
+	`m_id`
+);
+
+ALTER TABLE `MEMBER` ADD CONSTRAINT `PK_MEMBER` PRIMARY KEY (
+	`m_id`
+);
+
+ALTER TABLE `NOTE` ADD CONSTRAINT `FK_MEMBER_TO_NOTE_1` FOREIGN KEY (
+	`m_id`
+)
+REFERENCES `MEMBER` (
+	`m_id`
+);
+
