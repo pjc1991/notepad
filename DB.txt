@@ -1,6 +1,6 @@
-# MySQL
-# When you initiate your MariaDB first time.
-# https://www.erdcloud.com/d/wBfCvkr6r7HhnRQid
+--  MySQL
+-- When you initiate your MariaDB first time.
+-- https://www.erdcloud.com/d/wBfCvkr6r7HhnRQid
 
 CREATE DATABASE notepad;
 
