@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <!-- Header -->
   <head th:replace="fragments/header :: header"></head>
 
   <body>
     <div class="container">
-      <!-- Top -->
       <div th:replace="fragments/top :: top"></div>
-
-      <!-- Main contents should be here -->
       <div class="content">
-
         <div class="row">
-          <!-- Test Code-->
           <p th:text="${msg }">Hello, World!</p>
         </div>
-
       </div>
-
-      <!-- Footer -->
       <div th:replace="fragments/footer :: footer"></div>
     </div>
   </body>
