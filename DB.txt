@@ -13,25 +13,24 @@ SHOW GRANTS FOR 'pjc1991'@'localhost';
 DROP TABLE IF EXISTS `NOTE`;
 
 CREATE TABLE `NOTE` (
-	`n_idx`	INT	NOT NULL,
-	`m_id`	VARCHAR	NOT NULL,
-	`n_title`	VARCHAR	NULL,
-	`n_contemnt`	VARCHAR	NULL,
-	`n_status`	INT	NULL
+	`n_idx`	INT(20)	NOT NULL,
+	`m_id`	VARCHAR(30)	NOT NULL,
+	`n_title`	VARCHAR(100)	NULL,
+	`n_contemnt`	VARCHAR(5000)	NULL,
+	`n_status`	INT(2)	NULL
 );
 
 DROP TABLE IF EXISTS `MEMBER`;
 
 CREATE TABLE `MEMBER` (
-	`m_id`	VARCHAR	NOT NULL,
-	`m_pw`	VARCHAR	NULL,
-	`m_mail`	VARCHAR	NULL,
-	`m_admin`	INT	NULL
+	`m_id`	VARCHAR(30)	NOT NULL,
+	`m_pw`	VARCHAR(30)	NULL,
+	`m_mail`	VARCHAR(50)	NULL,
+	`m_admin`	INT(2)	NULL
 );
 
 ALTER TABLE `NOTE` ADD CONSTRAINT `PK_NOTE` PRIMARY KEY (
-	`n_idx`,
-	`m_id`
+	`n_idx`
 );
 
 ALTER TABLE `MEMBER` ADD CONSTRAINT `PK_MEMBER` PRIMARY KEY (

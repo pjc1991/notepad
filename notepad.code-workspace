@@ -7,6 +7,12 @@
 	],
 	"settings": {
 		"java.configuration.updateBuildConfiguration": "interactive",
-		"java.dependency.packagePresentation": "hierarchical"
+		"java.dependency.packagePresentation": "hierarchical",
+		"files.exclude": {
+			"**/.classpath": true,
+			"**/.project": true,
+			"**/.settings": true,
+			"**/.factorypath": true
+		}
 	}
 }
