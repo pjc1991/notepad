@@ -26,5 +26,10 @@ public class HomeServiceImpl implements HomeService {
     public List<NoteDto> noteList(MemberDto memberDto) {
         return hd.noteList(memberDto);
     }
-    
+
+    @Override
+    public int insertNote(NoteDto dto) {
+        return hd.insertNote(dto);
+    }
+
 }

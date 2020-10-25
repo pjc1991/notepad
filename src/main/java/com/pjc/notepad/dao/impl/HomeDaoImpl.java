@@ -41,6 +41,15 @@ public class HomeDaoImpl implements HomeDao {
         return list;
     }
 
+    @Override
+    public int insertNote(NoteDto dto) {
+        int result = 0;
+        try {
+            result = session.insert("insertNote", dto);
+        } catch (Exception e) {
+            logger.error("insertNote Exception : " + e.getMessage());
+        }
+        return result;
+    }
 
-    
 }

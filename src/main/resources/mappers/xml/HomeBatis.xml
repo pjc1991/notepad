@@ -17,5 +17,21 @@
     FROM note
     WHERE 
       m_id = #{m_id}
+    ORDER BY
+      n_regdate DESC
   </select>
+
+  <insert id="insertNote" parameterType="MemberDto">
+  INSERT note 
+          (m_id,
+           n_title, 
+           n_content, 
+           n_status)
+  VALUES  (#{m_id},
+           #{n_title},
+           #{n_content},
+           #{n_status}
+           )
+  </insert>
+
 </mapper>

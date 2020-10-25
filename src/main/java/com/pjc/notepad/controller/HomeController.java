@@ -1,10 +1,10 @@
 package com.pjc.notepad.controller;
 
-
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.pjc.notepad.service.HomeService;
 import com.pjc.notepad.vo.impl.MemberDto;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class HomeController {
@@ -34,47 +35,64 @@ public class HomeController {
     }
 
     @RequestMapping("loginPro.do")
-    public String loginPro(Model model, HttpServletRequest request, MemberDto dto){
+    public String loginPro(Model model, HttpServletRequest request, MemberDto dto,
+            RedirectAttributes redirectAttributes) {
 
         logger.info("loginPro RemoteAddr : " + request.getRemoteAddr());
         logger.info("MemberDto m_id : " + dto.getM_id());
         logger.info("MemberDto m_pw : " + dto.getM_pw());
 
         dto = hs.loginPro(dto);
-        if(dto != null) {
+        String msg;
+        if (dto != null) {
             logger.info("result => " + dto.getM_status());
             request.getSession().setAttribute("MemberDto", dto);
+            msg = "성공적으로 로그인되었습니다. " + dto.getM_id() + "님.";
+        } else {
+            msg = "로그인에 실패하셨습니다.";
         }
+        logger.info(msg);
+        redirectAttributes.addFlashAttribute("msg", msg);
 
-
-        return "redirect:loginForm.do";
+        return "redirect:noteList.do";
     }
 
     @RequestMapping("noteList.do")
-    public String noteList(Model model, HttpServletRequest request, NoteDto dto){
+    public String noteList(Model model, HttpServletRequest request, NoteDto dto) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("MemberDto") == null) {
+            return "redirect:/loginForm.do";
+        }
 
         logger.info("noteList RemoteAddr : " + request.getRemoteAddr());
         MemberDto memberDto = (MemberDto) request.getSession().getAttribute("MemberDto");
-
         List<NoteDto> list = hs.noteList(memberDto);
-
+        if (list.size() > 0) {
+            logger.info(list.get(0).getN_regdate().toString());
+        }
         model.addAttribute("noteList", list);
 
         return "noteList";
     }
 
-    @RequestMapping("/home")
-    public String Home (Model model) {
-        return "home";
+    @RequestMapping("insertNote.do")
+    public String insertNote(Model model, HttpServletRequest request, NoteDto dto,
+            RedirectAttributes redirectAttributes) {
+        logger.info("insertNote RemoteAddr : " + request.getRemoteAddr());
+        HttpSession session = request.getSession();
+        MemberDto loginDto = (MemberDto) session.getAttribute("MemberDto");
+
+        dto.setM_id(loginDto.getM_id());
+        dto.setN_status(1);
+        int result = hs.insertNote(dto);
+
+        if (result > 0) {
+            redirectAttributes.addFlashAttribute("msg", "입력 성공");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "입력 실패");
+        }
+
+        return "redirect:/noteList.do";
     }
 
-    @RequestMapping("/test")
-    public String test(Model model){
-
-        logger.info("Test init. ");
-        model.addAttribute("msg", "Hello, This is from Controller. ");
-        
-        return "default";
-    }
-    
 }

@@ -10,10 +10,8 @@ public class Member {
     private String m_id;
     private String m_pw;
     private String m_mail;
-    private int m_status;
-    private int m_admin;
+    private Integer m_status;
+    private Integer m_admin;
     private Date m_regdate;
 
-
-    
 }

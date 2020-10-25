@@ -10,5 +10,7 @@ public interface HomeService {
 	MemberDto loginPro(MemberDto dto);
 
 	List<NoteDto> noteList(MemberDto memberDto);
+
+	int insertNote(NoteDto dto);
     
 }
