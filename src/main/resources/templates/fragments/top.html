@@ -1,35 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <body>
-
     <div th:fragment="top">
-          <!-- result 값을 이용한 modal -->
-		<script th:if="${msg != null}" type="text/javascript">
-			$(document).ready(function(){
-				$("#updateModal").modal('show')
-			
-			})
-    </script>
-    
-		<!-- Modal -->
-		<div class="modal fade" id="updateModal" tabindex="-1"
-			aria-labelledby="updateModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body" th:text="${msg }"> </div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">확인</button>
-					</div>
-				</div>
-			</div>
-    </div>
-    
+      <!-- result 값을 이용한 modal -->
+      <script th:if="${msg != null}" type="text/javascript">
+        $(document).ready(function () {
+          $("#updateModal").modal("show");
+        });
+      </script>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="updateModal"
+        tabindex="-1"
+        aria-labelledby="updateModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body" th:text="${msg }"></div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
-        <p  th:if="${session['MemberDto'] != null}"
-            class="text-light">
-          현재 로그인 중인 아이디 :
-          <span th:text="${session['MemberDto'].m_id}">없음</span>
+        <p th:if="${session['MemberDto'] != null}" class="text-light">
+          <button
+            onclick="location.href='/logout.do'"
+            class="btn btn-secondary my-3"
+          >
+            Logout
+          </button>
         </p>
       </div>
     </div>

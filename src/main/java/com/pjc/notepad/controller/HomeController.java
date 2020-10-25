@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
@@ -43,18 +45,30 @@ public class HomeController {
         logger.info("MemberDto m_pw : " + dto.getM_pw());
 
         dto = hs.loginPro(dto);
+        
         String msg;
+        String returnTarget;
+
         if (dto != null) {
             logger.info("result => " + dto.getM_status());
             request.getSession().setAttribute("MemberDto", dto);
             msg = "성공적으로 로그인되었습니다. " + dto.getM_id() + "님.";
+            returnTarget = "redirect:noteList.do";
         } else {
             msg = "로그인에 실패하셨습니다.";
+            returnTarget = "redirect:loginForm.do";
         }
         logger.info(msg);
         redirectAttributes.addFlashAttribute("msg", msg);
 
-        return "redirect:noteList.do";
+        return returnTarget;
+    }
+
+    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "redirect:/loginForm.do";
     }
 
     @RequestMapping("noteList.do")
