@@ -28,6 +28,13 @@ public class HomeController {
     @Resource(name = "HomeService")
     HomeService hs;
 
+    @RequestMapping("/")
+    public String index(Model model, HttpServletRequest request) {
+        logger.info("loginForm RemoteAddr : " + request.getRemoteAddr());
+
+        return "redirect:/loginForm.do";
+    }
+
     @RequestMapping("loginForm.do")
     public String loginForm(Model model, HttpServletRequest request) {
         logger.info("loginForm RemoteAddr : " + request.getRemoteAddr());
