@@ -32,17 +32,17 @@ public class HomeController {
     public String index(Model model, HttpServletRequest request) {
         logger.info("loginForm RemoteAddr : " + request.getRemoteAddr());
 
-        return "redirect:/loginForm.do";
+        return "redirect:/login";
     }
 
-    @RequestMapping("loginForm.do")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginForm(Model model, HttpServletRequest request) {
         logger.info("loginForm RemoteAddr : " + request.getRemoteAddr());
 
         return "loginForm";
     }
 
-    @RequestMapping("loginPro.do")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginPro(Model model, HttpServletRequest request, MemberDto dto,
             RedirectAttributes redirectAttributes) {
 
@@ -59,10 +59,10 @@ public class HomeController {
             logger.info("result => " + dto.getM_status());
             request.getSession().setAttribute("MemberDto", dto);
             msg = "성공적으로 로그인되었습니다. " + dto.getM_id() + "님.";
-            returnTarget = "redirect:noteList.do";
+            returnTarget = "redirect:/note";
         } else {
             msg = "로그인에 실패하셨습니다.";
-            returnTarget = "redirect:loginForm.do";
+            returnTarget = "redirect:/login";
         }
         logger.info(msg);
         redirectAttributes.addFlashAttribute("msg", msg);
@@ -70,18 +70,18 @@ public class HomeController {
         return returnTarget;
     }
 
-    @RequestMapping(value = "logout.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return "redirect:/loginForm.do";
+        return "redirect:/login";
     }
 
-    @RequestMapping("noteList.do")
+    @RequestMapping(value = "/note", method = RequestMethod.GET)
     public String noteList(Model model, HttpServletRequest request, NoteDto dto) {
         HttpSession session = request.getSession();
         if (session.getAttribute("MemberDto") == null) {
-            return "redirect:/loginForm.do";
+            return "redirect:/login";
         }
 
         logger.info("noteList RemoteAddr : " + request.getRemoteAddr());
@@ -95,7 +95,7 @@ public class HomeController {
         return "noteList";
     }
 
-    @RequestMapping("insertNote.do")
+    @RequestMapping(value = "/note", method = RequestMethod.POST)
     public String insertNote(Model model, HttpServletRequest request, NoteDto dto,
             RedirectAttributes redirectAttributes) {
         logger.info("insertNote RemoteAddr : " + request.getRemoteAddr());
@@ -112,7 +112,7 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("msg", "입력 실패");
         }
 
-        return "redirect:/noteList.do";
+        return "redirect:/note";
     }
 
 }

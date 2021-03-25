@@ -9,7 +9,7 @@
         <div class="row">
           <div class="col-lg-2 col-sm-0"></div>
           <div class="col-lg-8 col-sm-12">
-            <form action="/insertNote.do">
+            <form action="/note" method="POST">
               <div class="input-group my-3">
                 <input
                   class="form-control"
@@ -39,7 +39,10 @@
                 </div>
                 <div class="card-text" >
                   <p th:text="${item.n_content}"></p>
-                  <p class="float-right"><i th:text="${item.n_regdate}"></i></p>
+                  <p class="float-right">
+                  <i th:text="${item.n_regdate}"></i><br>
+                  <a href="#" onclick="">삭제</a>
+                  </p>
                 </div>
               </div>
           </div>
