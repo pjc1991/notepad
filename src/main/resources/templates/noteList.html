@@ -14,14 +14,14 @@
                 <input
                   class="form-control"
                   type="text"
-                  name="n_title"
+                  name="noteTitle"
                   placeholder="제목..."
                 />
               </div>
               <div class="input-group my-3">
               <textarea
                 class="form-control"
-                name="n_content"
+                name="noteContent"
                 cols="30"
                 rows="10"
                 placeholder="내용... "
@@ -35,12 +35,12 @@
             <div class="card my-3" th:each="item : ${noteList}">
               <div class="card-body">
                 <div class="card-title" >
-                  <h4 th:text="${item.n_title }"></h4>
+                  <h4 th:text="${item.noteTitle }"></h4>
                 </div>
                 <div class="card-text" >
-                  <p th:text="${item.n_content}"></p>
+                  <p th:text="${item.noteContent}"></p>
                   <p class="float-right">
-                  <i th:text="${item.n_regdate}"></i><br>
+                  <i th:text="${item.noteRegdate}"></i><br>
                   <a href="#" onclick="">삭제</a>
                   </p>
                 </div>
