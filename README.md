@@ -1,3 +1,7 @@
+# Basical CRUD Applicaiotion, you can make, read, modify, delete some notes.
+# Doing some updates for JPA
+
+
 # notepad
 
 lang : java, SpringBoot, Thymeleaf
