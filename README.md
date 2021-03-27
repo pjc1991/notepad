@@ -1,8 +1,17 @@
-# Basical CRUD Applicaiotion, you can make, read, modify, delete some notes.
-# Doing some updates for JPA
+# Doing some updates
 
+It was using myBatis before. now It's using JPA.
+
+Things to do : 
+
+> need some security updates including encoding Pw and E-Mail.
+> gonna provide RESTful API.
+> Notes needs to be paged.
 
 # notepad
+
+Basical CRUD Applicaiotion, you can make, read, modify, delete some notes.
+(I mean, you will.)
 
 lang : java, SpringBoot, Thymeleaf
 
