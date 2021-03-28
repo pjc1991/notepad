@@ -1,11 +1,13 @@
 package com.pjc.notepad.member.service;
 
+import com.pjc.notepad.member.service.dto.MemberDto;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public interface MemberService {
-    Member login(Member member);
+    MemberDto login(MemberDto memberDto);
 
-    int insertMember(Member member);
+    int insertMember(MemberDto memberDto);
 
 }

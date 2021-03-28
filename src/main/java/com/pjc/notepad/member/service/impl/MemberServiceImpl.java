@@ -2,9 +2,12 @@ package com.pjc.notepad.member.service.impl;
 
 import java.util.Optional;
 
-import com.pjc.notepad.member.service.Member;
+import com.pjc.notepad.member.service.entity.Member;
+import com.pjc.notepad.util.ModelMapperUtil;
 import com.pjc.notepad.member.service.MemberRepository;
 import com.pjc.notepad.member.service.MemberService;
+import com.pjc.notepad.member.service.dto.MemberDto;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +22,26 @@ public class MemberServiceImpl implements MemberService {
     MemberRepository memberRepository;
 
     @Override
-    public Member login(Member member) {
-        LOGGER.debug("login  member.getMemberId() = {}", member.getMemberId());
-        Optional<Member> memberOptional = memberRepository.findById(member.getMemberId());
-        if (memberOptional.isPresent()) {
-            return memberOptional.get();
-        } else {
+    public MemberDto login(MemberDto memberDto) {
+        LOGGER.debug("login  member.getMemberId() = {}", memberDto.getMemberId());
+        Optional<Member> memberOptional = memberRepository.findById(memberDto.getMemberId());
+        // 아이디 존재 여부 확인
+        if (!memberOptional.isPresent()) {
+            // 존재하지 않을 경우 null
             return null;
+        } else if (!memberOptional.get().getMemberPw().equals(memberDto.getMemberPw())) {
+            // 패스워드 불일치시 null
+            return null;
+        } else {
+            return ModelMapperUtil.getModelMapper().map(memberOptional.get(), MemberDto.class);
         }
+
     }
 
     @Override
-    public int insertMember(Member member) {
-        LOGGER.info("login  member.getMemberId() = {}", member.getMemberId());
+    public int insertMember(MemberDto memberDto) {
+        LOGGER.info("login  member.getMemberId() = {}", memberDto.getMemberId());
+        Member member = ModelMapperUtil.getModelMapper().map(memberDto, Member.class);
         member.setMemberLastLoginDate();
         member.setMemberRegDate();
         try {

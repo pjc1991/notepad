@@ -3,9 +3,9 @@ package com.pjc.notepad.member.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.pjc.notepad.member.service.Member;
 import com.pjc.notepad.member.service.MemberJoinValidator;
 import com.pjc.notepad.member.service.MemberService;
+import com.pjc.notepad.member.service.dto.MemberDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -36,7 +37,7 @@ public class MemberUserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginPost(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
-            Member member) {
+            MemberDto member) {
 
         LOGGER.info("loginPro RemoteAddr : " + request.getRemoteAddr());
         LOGGER.info("member m_id : " + member.getMemberId());
@@ -69,21 +70,28 @@ public class MemberUserController {
     }
 
     @RequestMapping(value = "/member/form", method = RequestMethod.GET)
-    public String memberFormGet(HttpServletRequest request) {
+    public String memberFormGet(HttpServletRequest request, @ModelAttribute("memberDto") MemberDto memberDto,
+            BindingResult bindingResult, Model model) {
+        LOGGER.info("Member DTO " + memberDto.toString());
+        // return "redirect:/login";
         return "member/form";
     }
 
     @RequestMapping(value = "/member", method = RequestMethod.POST)
-    public String memberPost(HttpServletRequest request, Member member, BindingResult bindingResult, Model model) {
-        memberJoinValidator.validate(member, bindingResult);
+    public String memberPost(HttpServletRequest request, @ModelAttribute("memberDto") MemberDto memberDto,
+            BindingResult bindingResult, Model model) {
+        memberJoinValidator.validate(memberDto, bindingResult);
         if (!bindingResult.hasErrors()) {
-            int result = memberService.insertMember(member);
+            // Validation 성공
+            int result = memberService.insertMember(memberDto);
             LOGGER.info("result => {}", result);
             if (result < 0) {
+                // DB 처리 실패 케이스
                 model.addAttribute("msg", "가입에 실패하셨습니다. ");
             }
             return "redirect:/login";
         } else {
+            // Validation 실패
             model.addAttribute("msg", "입력값에 오류가 있습니다.");
             return "redirect:/member/form";
         }

@@ -1,4 +1,4 @@
-package com.pjc.notepad.member.service;
+package com.pjc.notepad.member.service.entity;
 
 import java.util.Date;
 

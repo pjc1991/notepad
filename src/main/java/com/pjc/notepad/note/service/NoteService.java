@@ -2,10 +2,16 @@ package com.pjc.notepad.note.service;
 
 import java.util.List;
 
+import com.pjc.notepad.note.service.dto.NoteDto;
+
 public interface NoteService {
 
-    List<Note> GetByMemberId(String memberId);
+    List<NoteDto> GetByMemberId(String memberId);
 
-    Note insertNote(Note note);
+    NoteDto insertNote(NoteDto note);
+
+    NoteDto getByNoteIdx(Integer noteIdx);
+
+    void DeleteByNoteIdx(int noteIdx);
 
 }
