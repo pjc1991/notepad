@@ -25,12 +25,12 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto login(MemberDto memberDto) {
         LOGGER.debug("login  member.getMemberId() = {}", memberDto.getMemberId());
         Optional<Member> memberOptional = memberRepository.findById(memberDto.getMemberId());
-        // 아이디 존재 여부 확인
+        // ID doesn't exists
         if (!memberOptional.isPresent()) {
-            // 존재하지 않을 경우 null
+            // if it's not, it's null
             return null;
         } else if (!memberOptional.get().getMemberPw().equals(memberDto.getMemberPw())) {
-            // 패스워드 불일치시 null
+            // wrong password, null
             return null;
         } else {
             return ModelMapperUtil.getModelMapper().map(memberOptional.get(), MemberDto.class);

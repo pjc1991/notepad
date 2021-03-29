@@ -82,16 +82,16 @@ public class MemberUserController {
             BindingResult bindingResult, Model model) {
         memberJoinValidator.validate(memberDto, bindingResult);
         if (!bindingResult.hasErrors()) {
-            // Validation 성공
+            // Validation success
             int result = memberService.insertMember(memberDto);
             LOGGER.info("result => {}", result);
             if (result < 0) {
-                // DB 처리 실패 케이스
+                // Database failed
                 model.addAttribute("msg", "가입에 실패하셨습니다. ");
             }
             return "redirect:/login";
         } else {
-            // Validation 실패
+            // Validation error
             model.addAttribute("msg", "입력값에 오류가 있습니다.");
             return "redirect:/member/form";
         }
