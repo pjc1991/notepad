@@ -41,7 +41,8 @@
                   <p th:text="${item.noteContent}"></p>
                   <p class="float-right">
                   <i th:text="${item.noteRegdate}"></i><br>
-                  <a href="#" onclick="">삭제</a>
+                  <a th:href="@{/note/delete/{noteIdx}(noteIdx=${item.noteIdx})}" onclick="">삭제</a>
+                  <a th:href="@{/note/{noteIdx}(noteIdx=${item.noteIdx})}" onclick="">수정</a>
                   </p>
                 </div>
               </div>

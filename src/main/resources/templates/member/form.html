@@ -9,7 +9,13 @@
         <div class="row">
           <div class="col"></div>
           <div class="col">
-            <form name="frm" action="/member" method="POST">
+            <!-- <form name="frm" action="/member" method="POST"> -->
+            <form
+              name="frm"
+              action="/member"
+              th:object="${memberDto}"
+              method="POST"
+            >
               <div class="form-group">
                 <label for="memberId">
                   <b class="text-light">ID : </b>
@@ -19,8 +25,13 @@
                   id="memberId"
                   type="text"
                   name="memberId"
+                  th:field="*{memberId}"
                   placeholder="ID를 입력해주세요."
                 />
+                <p
+                  th:if="${#fields.hasErrors('memberId')}"
+                  th:errors="*{memberId}"
+                ></p>
                 <label for="memberPw">
                   <b class="text-light">Password : </b>
                 </label>
@@ -29,8 +40,13 @@
                   id="memberPw"
                   type="password"
                   name="memberPw"
+                  th:field="*{memberPw}"
                   placeholder="Password를 입력해주세요."
                 />
+                <p
+                  th:if="${#fields.hasErrors('memberPw')}"
+                  th:errors="*{memberPw}"
+                ></p>
                 <label for="memberMail">
                   <b class="text-light">Password : </b>
                 </label>
@@ -39,8 +55,13 @@
                   id="memberMail"
                   type="email"
                   name="memberMail"
+                  th:field="*{memberMail}"
                   placeholder="이메일을 입력해주세요."
                 />
+                <p
+                  th:if="${#fields.hasErrors('memberMail')}"
+                  th:errors="*{memberMail}"
+                ></p>
                 <input
                   type="submit"
                   class="btn btn-primary my-3"
