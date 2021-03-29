@@ -14,4 +14,6 @@ public interface NoteService {
 
     void DeleteByNoteIdx(int noteIdx);
 
+    NoteDto updateNote(NoteDto noteDto);
+
 }

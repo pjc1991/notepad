@@ -77,18 +77,18 @@ public class NoteUserController {
         MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
         LOGGER.info("NoteDto.getNoteIdx : {}", noteDto.getNoteIdx());
         if (currentUser == null) {
-            // 로그인 안됨 처리
-            // 에러 핸들링은 어떻게 해야하나?
+            // something happens when you are not logged in
+            // should return error, but how?
             return null;
         }
 
         // 노트 소유자 확인
         NoteDto fromDB = noteService.getByNoteIdx(noteDto.getNoteIdx());
         if (!currentUser.getMemberId().equals(fromDB.getMemberId())) {
-            // 타인 노트 수정
+            // you are trying to modify notes of someone else
             return null;
         } else {
-            // 정상 작동
+            // everything is fine
             noteDto = noteService.updateNote(noteDto);
         }
         return noteDto;
@@ -99,19 +99,18 @@ public class NoteUserController {
             HttpSession session, @PathVariable("noteIdx") Integer noteIdx) {
         MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
         if (currentUser == null) {
-            // 로그인 안됨 처리
+            // you are not logged in
             return "redirect:/login";
         }
         NoteDto fromDB = noteService.getByNoteIdx(noteIdx);
         if (!currentUser.getMemberId().equals(fromDB.getMemberId())) {
-            // 타인 노트 수정
+            // it's not your notes
             return "redirect:/note";
         }
         model.addAttribute("note", fromDB);
         return "note/form";
     }
 
-    // 디버깅 중 ...
     @RequestMapping(value = "/note/delete/{noteIdx}", method = RequestMethod.GET)
     public String NoteDeleteApi(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
             @PathVariable("noteIdx") String noteIdx) {

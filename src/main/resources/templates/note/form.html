@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="fragments/header :: header"></head>
+
+  <body class="bg-dark">
+    <div class="container">
+      <div th:replace="fragments/top :: top"></div>
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-2 col-sm-0"></div>
+          <div class="col-lg-8 col-sm-12">
+            <form action="/note" method="POST" onsubmit="return false;">
+              <div class="input-group my-3">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="noteTitle"
+                  id="noteTitle"
+                  placeholder="제목..."
+                  th:value="*{note.noteTitle}"
+                />
+              </div>
+              <div class="input-group my-3">
+              <textarea
+                class="form-control"
+                name="noteContent"
+                cols="30"
+                rows="10"
+                id="noteContent"
+                placeholder="내용... "
+                th:th:text="*{note.noteContent}"
+              ></textarea>
+            </div>
+            <div class="input-group my-3">
+                <input type="hidden" name="noteIdx" th:field="*{note.noteIdx}" id="noteIdx">
+                <input type="submit" value="수정" onclick="noteModify(); return false;" class="form-control btn btn-primary">
+            </div>
+            </form>
+          <div class="col-lg-2 col-sm-0"></div>
+        </div>
+      </div>
+      <div th:replace="fragments/footer :: footer"></div>
+    </div>
+    <script>
+      function noteModify(){
+        
+        console.log("test!");
+        const noteTitle = document.getElementById("noteTitle").value;
+        const noteContent = document.getElementById("noteContent").value;
+        const noteIdx = document.getElementById("noteIdx").value;
+
+        fetch("/note", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            noteTitle : noteTitle,
+            noteContent : noteContent,
+            noteIdx : noteIdx
+          }),
+        })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => alert(error))
+      }
+    </script>
+  </body>
+</html>
