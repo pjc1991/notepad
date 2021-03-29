@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,7 +47,7 @@ public class NoteUserController {
         }
         model.addAttribute("noteList", list);
 
-        return "noteList";
+        return "note/list";
     }
 
     @RequestMapping(value = "/note", method = RequestMethod.POST)
@@ -67,12 +70,45 @@ public class NoteUserController {
         return "redirect:/note";
     }
 
-    @RequestMapping(value = "/note/{noteIdx}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/note", method = RequestMethod.PUT)
     @ResponseBody
     public NoteDto NotePutApi(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
-            @PathVariable("noteIdx") String noteIdx) {
-        // TODO : UPDATE
-        return null;
+            @RequestBody NoteDto noteDto, HttpSession session) {
+        MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
+        LOGGER.info("NoteDto.getNoteIdx : {}", noteDto.getNoteIdx());
+        if (currentUser == null) {
+            // 로그인 안됨 처리
+            // 에러 핸들링은 어떻게 해야하나?
+            return null;
+        }
+
+        // 노트 소유자 확인
+        NoteDto fromDB = noteService.getByNoteIdx(noteDto.getNoteIdx());
+        if (!currentUser.getMemberId().equals(fromDB.getMemberId())) {
+            // 타인 노트 수정
+            return null;
+        } else {
+            // 정상 작동
+            noteDto = noteService.updateNote(noteDto);
+        }
+        return noteDto;
+    }
+
+    @RequestMapping(value = "/note/{noteIdx}", method = RequestMethod.GET)
+    public String NoteFormGet(Model model, @ModelAttribute("note") NoteDto noteDto, BindingResult bindingResult,
+            HttpSession session, @PathVariable("noteIdx") Integer noteIdx) {
+        MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            // 로그인 안됨 처리
+            return "redirect:/login";
+        }
+        NoteDto fromDB = noteService.getByNoteIdx(noteIdx);
+        if (!currentUser.getMemberId().equals(fromDB.getMemberId())) {
+            // 타인 노트 수정
+            return "redirect:/note";
+        }
+        model.addAttribute("note", fromDB);
+        return "note/form";
     }
 
     // 디버깅 중 ...
@@ -86,7 +122,6 @@ public class NoteUserController {
             int noteIdxParsed = Integer.parseInt(noteIdx);
             NoteDto noteDto = noteService.getByNoteIdx(noteIdxParsed);
             LOGGER.info("noteDto is {}", noteDto.toString());
-            // 현재 정상적으로 noteDto가 인출되어오지 않음. ModelMapper? Entity? Repository?
             if (noteDto.getMemberId().equals(currentUser.getMemberId())) {
                 noteService.DeleteByNoteIdx(noteIdxParsed);
             }
