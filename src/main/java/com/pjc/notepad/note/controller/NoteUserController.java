@@ -12,7 +12,6 @@ import com.pjc.notepad.note.service.dto.NoteDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,13 +23,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class NoteUserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NoteUserController.class);
 
-    @Autowired
-    NoteService noteService;
+    private final NoteService noteService;
 
     @RequestMapping(value = "/note", method = RequestMethod.GET)
     public String noteList(Model model, HttpServletRequest request) {

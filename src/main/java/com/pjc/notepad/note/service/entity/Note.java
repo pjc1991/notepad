@@ -6,7 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,17 +32,22 @@ public class Note {
     private String noteContent;
     private Integer noteStatus;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date noteRegdate;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private Date noteLastUpdate;
 
-    @PrePersist
-    void preInsert() {
-        if (this.noteRegdate == null) {
-            this.noteRegdate = new Date();
-        }
-        if (this.noteLastUpdate == null) {
-            this.noteLastUpdate = new Date();
-        }
-    }
+    // @PrePersist
+    // void preInsert() {
+    // if (this.noteRegdate == null) {
+    // this.noteRegdate = new Date();
+    // }
+    // if (this.noteLastUpdate == null) {
+    // this.noteLastUpdate = new Date();
+    // }
+    // }
 
 }

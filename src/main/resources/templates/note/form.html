@@ -28,7 +28,7 @@
                 rows="10"
                 id="noteContent"
                 placeholder="내용... "
-                th:th:text="*{note.noteContent}"
+                th:text="*{note.noteContent}"
               ></textarea>
             </div>
             <div class="input-group my-3">
@@ -62,6 +62,7 @@
         })
         .then((response) => response.json())
         .then((data) => console.log(data))
+        .then(() => location.href = '/note')
         .catch((error) => alert(error))
       }
     </script>

@@ -42,8 +42,8 @@ public class MemberServiceImpl implements MemberService {
     public int insertMember(MemberDto memberDto) {
         LOGGER.info("login  member.getMemberId() = {}", memberDto.getMemberId());
         Member member = ModelMapperUtil.getModelMapper().map(memberDto, Member.class);
-        member.setMemberLastLoginDate();
-        member.setMemberRegDate();
+        // member.setMemberLastLoginDate();
+        // member.setMemberRegDate();
         try {
             LOGGER.info("memberId : {}", member.getMemberId());
             memberRepository.save(member);
