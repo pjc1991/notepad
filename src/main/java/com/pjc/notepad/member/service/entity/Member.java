@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,20 +35,22 @@ public class Member {
     private Integer memberStatus;
     private Integer memberAdmin;
 
+    @CreationTimestamp
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date memberRegDate;
 
+    @UpdateTimestamp
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date memberLastLoginDate;
 
-    public void setMemberLastLoginDate() {
-        this.memberLastLoginDate = new Date();
-    }
+    // public void setMemberLastLoginDate() {
+    // this.memberLastLoginDate = new Date();
+    // }
 
-    public void setMemberRegDate() {
-        this.memberRegDate = new Date();
-    }
+    // public void setMemberRegDate() {
+    // this.memberRegDate = new Date();
+    // }
 
 }

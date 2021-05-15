@@ -40,7 +40,10 @@
                 <div class="card-text" >
                   <p th:text="${item.noteContent}"></p>
                   <p class="float-right">
+                  작성일 : 
                   <i th:text="${item.noteRegdate}"></i><br>
+                  수정일 :
+                  <i th:text="${item.noteLastUpdate}"></i><br>
                   <a th:href="@{/note/delete/{noteIdx}(noteIdx=${item.noteIdx})}" onclick="">삭제</a>
                   <a th:href="@{/note/{noteIdx}(noteIdx=${item.noteIdx})}" onclick="">수정</a>
                   </p>
