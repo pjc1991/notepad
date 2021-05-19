@@ -31,7 +31,7 @@ public class MemberUserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginGet(Model model, HttpServletRequest request) {
-        LOGGER.info("loginForm RemoteAddr : " + request.getRemoteAddr());
+        LOGGER.info("loginForm RemoteAddr : {}",  request.getRemoteAddr());
         return "member/loginForm";
     }
 
@@ -39,9 +39,9 @@ public class MemberUserController {
     public String loginPost(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
             MemberDto member) {
 
-        LOGGER.info("loginPro RemoteAddr : " + request.getRemoteAddr());
-        LOGGER.info("member m_id : " + member.getMemberId());
-        LOGGER.info("member m_pw : " + member.getMemberPw());
+        LOGGER.info("loginPro RemoteAddr : {}", request.getRemoteAddr());
+        LOGGER.info("member m_id : {} ",  member.getMemberId());
+        LOGGER.info("member m_pw : {} ", member.getMemberPw());
 
         member = memberService.login(member);
 
@@ -49,8 +49,8 @@ public class MemberUserController {
         String returnTarget = "";
 
         if (member != null) {
-            LOGGER.info("result => " + member.getMemberStatus());
-            request.getSession().setAttribute("currentUser", member);
+            LOGGER.info("result => {}", member.getMemberStatus());
+            request.getSession().setAttribute("currentUser", member.toString());
             msg = "성공적으로 로그인되었습니다. " + member.getMemberId() + "님.";
             returnTarget = "redirect:/note";
         } else {
@@ -72,7 +72,7 @@ public class MemberUserController {
     @RequestMapping(value = "/member/form", method = RequestMethod.GET)
     public String memberFormGet(HttpServletRequest request, @ModelAttribute("memberDto") MemberDto memberDto,
             BindingResult bindingResult, Model model) {
-        LOGGER.info("Member DTO " + memberDto.toString());
+        LOGGER.info("Member DTO : {}", memberDto);
         // return "redirect:/login";
         return "member/form";
     }

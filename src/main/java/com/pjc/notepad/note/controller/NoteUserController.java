@@ -39,11 +39,11 @@ public class NoteUserController {
         if (session.getAttribute("currentUser") == null) {
             return "redirect:/login";
         }
-        LOGGER.info("noteList RemoteAddr : " + request.getRemoteAddr());
+        LOGGER.info("noteList RemoteAddr : {} ", request.getRemoteAddr());
         MemberDto loginUser = (MemberDto) request.getSession().getAttribute("currentUser");
 
         List<NoteDto> list = noteService.GetByMemberId(loginUser.getMemberId());
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             LOGGER.info(list.get(0).getNoteRegdate().toString());
         }
         model.addAttribute("noteList", list);
@@ -54,7 +54,7 @@ public class NoteUserController {
     @RequestMapping(value = "/note", method = RequestMethod.POST)
     public String insertNote(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
             NoteDto note) {
-        LOGGER.info("insertNote RemoteAddr : " + request.getRemoteAddr());
+        LOGGER.info("insertNote RemoteAddr : {} ", request.getRemoteAddr());
         HttpSession session = request.getSession();
         MemberDto loginUser = (MemberDto) session.getAttribute("currentUser");
 
@@ -117,11 +117,11 @@ public class NoteUserController {
             @PathVariable("noteIdx") String noteIdx) {
         HttpSession session = request.getSession();
         MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
-        LOGGER.info("currentUser is {}", currentUser.toString());
+        LOGGER.info("currentUser is {}", currentUser);
         try {
             int noteIdxParsed = Integer.parseInt(noteIdx);
             NoteDto noteDto = noteService.getByNoteIdx(noteIdxParsed);
-            LOGGER.info("noteDto is {}", noteDto.toString());
+            LOGGER.info("noteDto is {}", noteDto);
             if (noteDto.getMemberId().equals(currentUser.getMemberId())) {
                 noteService.DeleteByNoteIdx(noteIdxParsed);
             }
