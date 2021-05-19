@@ -1,6 +1,7 @@
 package com.pjc.notepad.member.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.pjc.notepad.member.service.MemberJoinValidator;
@@ -9,12 +10,14 @@ import com.pjc.notepad.member.service.dto.MemberDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
@@ -76,10 +79,11 @@ public class MemberUserController {
         // return "redirect:/login";
         return "member/form";
     }
-
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/member", method = RequestMethod.POST)
-    public String memberPost(HttpServletRequest request, @ModelAttribute("memberDto") MemberDto memberDto,
+    public String memberPost(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("memberDto") MemberDto memberDto,
             BindingResult bindingResult, Model model) {
+        LOGGER.info("memberPost memberId : {}", memberDto.getMemberId());
         memberJoinValidator.validate(memberDto, bindingResult);
         if (!bindingResult.hasErrors()) {
             // Validation success
@@ -88,10 +92,13 @@ public class MemberUserController {
             if (result < 0) {
                 // Database failed
                 model.addAttribute("msg", "가입에 실패하셨습니다. ");
+                response.setStatus(HttpStatus.BAD_GATEWAY.value()); // TODO : Exception, ExceptionHandler 로 추후 변경
+                return "redirect:/member/form";
             }
             return "redirect:/login";
         } else {
             // Validation error
+            response.setStatus(HttpStatus.BAD_REQUEST.value()); // TODO : Exception
             model.addAttribute("msg", "입력값에 오류가 있습니다.");
             return "redirect:/member/form";
         }
