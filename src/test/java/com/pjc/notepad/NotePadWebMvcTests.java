@@ -3,22 +3,34 @@ package com.pjc.notepad;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.LinkedHashMap;
+import java.util.Random;
+import java.util.UUID;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pjc.notepad.member.service.dto.MemberDto;
+
+import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 
-@SpringBootTest
 @AutoConfigureMockMvc
-class NotepadWebMvcTests {
+@SpringBootTest
+class NotePadWebMvcTests {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -26,12 +38,45 @@ class NotepadWebMvcTests {
 	private MockMvc mockMvc; 
 
 	@Test
-	void MockMvcIndex() throws Exception {
+	void MockMvcLoginGet() throws Exception {
 		this.mockMvc.perform(get("/login"))
 			.andDo(print())
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("ID")));
+			.andExpect(content().string(containsString("ID를 입력해주세요.")));
 		LOGGER.info("get test done!");
 	}
+
+	@Test
+	void MockMvcSignInPost() throws Exception {
+		LOGGER.info("MockMvcSignInPost Init");
+		int minCase = 100;
+		int maxCase = 10000;
+		Random random = new Random();
+		int testCase = random.nextInt(maxCase + minCase + 1);
+		LOGGER.info("MockMvcSignInPost testCase {}", testCase);
+		for (int i = 0; i < testCase; i++) {
+			
+			MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+			params.add("memberId", UUID.randomUUID().toString());
+			params.add("memberPw", "test");
+			params.add("memberMail", UUID.randomUUID().toString().substring(0,10)+"@"+"random.com");
+			LOGGER.info("random Member {}", params.get("memberId"));
+			
+			this.mockMvc.perform(post("/member")
+			.params(params))
+			.andExpect(status().isCreated());
+		}
+		LOGGER.info("post test done!");
+	}
+
+	public static String asJsonString(final Object obj) {
+		try {
+			final ObjectMapper mapper = new ObjectMapper();
+			final String jsonContent = mapper.writeValueAsString(obj);
+			return jsonContent;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}  
 
 }
