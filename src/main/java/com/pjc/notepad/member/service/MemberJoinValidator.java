@@ -23,6 +23,10 @@ public class MemberJoinValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        MemberDto memberDto = (MemberDto) target;
+        if(memberDto.getMemberId() == null){
+            errors.rejectValue("memberId", "memberIdNull");
+        }
         Member member = ModelMapperUtil.getModelMapper().map((MemberDto) target, Member.class);
         if (memberRepository.findById(member.getMemberId()).isPresent()) {
             errors.rejectValue("memberId", "중복되는 아이디가 존재합니다.");
