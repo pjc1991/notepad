@@ -38,8 +38,9 @@ public class MemberUserController {
         return "member/loginForm";
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginPost(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public String loginPost(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes, HttpServletResponse response,
             MemberDto member) {
 
         LOGGER.info("loginPro RemoteAddr : {}", request.getRemoteAddr());
@@ -58,6 +59,7 @@ public class MemberUserController {
             returnTarget = "redirect:/note";
         } else {
             msg = "로그인에 실패하셨습니다.";
+            response.setStatus(HttpStatus.NOT_FOUND.value());
             returnTarget = "redirect:/login";
         }
         LOGGER.info(msg);

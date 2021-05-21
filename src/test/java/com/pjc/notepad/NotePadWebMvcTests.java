@@ -38,21 +38,17 @@ class NotePadWebMvcTests {
 	private MockMvc mockMvc; 
 
 	@Test
-	void MockMvcLoginGet() throws Exception {
+	void MockMvc() throws Exception {
 		this.mockMvc.perform(get("/login"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("ID를 입력해주세요.")));
 		LOGGER.info("get test done!");
-	}
-
-	@Test
-	void MockMvcSignInPost() throws Exception {
 		LOGGER.info("MockMvcSignInPost Init");
 		int minCase = 100;
-		int maxCase = 10000;
+		int maxCase = 100;
 		Random random = new Random();
-		int testCase = random.nextInt(maxCase + minCase + 1);
+		int testCase = minCase + random.nextInt(maxCase - minCase + 1);
 		LOGGER.info("MockMvcSignInPost testCase {}", testCase);
 		for (int i = 0; i < testCase; i++) {
 			
@@ -66,6 +62,28 @@ class NotePadWebMvcTests {
 			.params(params))
 			.andExpect(status().isCreated());
 		}
+
+		MultiValueMap<String, String> testAccount = new LinkedMultiValueMap<>();
+
+		testAccount.add("memberId", "test");
+		testAccount.add("memberPw", "test");
+		testAccount.add("memberMail", "test@test.com");
+
+		this.mockMvc.perform(post("/member")
+			.params(testAccount))
+			.andExpect(status().isCreated());
+
+		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
+
+		login.add("memberId", "test");
+		login.add("memberPw", "test");
+		
+		this.mockMvc.perform(post("/login")
+			.params(login))
+			.andExpect(status().isOk());
+
+		
+
 		LOGGER.info("post test done!");
 	}
 
