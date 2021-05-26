@@ -38,12 +38,16 @@ class NotePadWebMvcTests {
 	private MockMvc mockMvc; 
 
 	@Test
-	void MockMvc() throws Exception {
+	void LoginGet() throws Exception {
 		this.mockMvc.perform(get("/login"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("ID를 입력해주세요.")));
 		LOGGER.info("get test done!");
+	}
+
+	@Test
+	void SignInPost() throws Exception {
 		LOGGER.info("MockMvcSignInPost Init");
 		int minCase = 100;
 		int maxCase = 100;
@@ -62,7 +66,9 @@ class NotePadWebMvcTests {
 			.params(params))
 			.andExpect(status().isCreated());
 		}
-
+	}
+	@Test
+	void SignInAndLoginTest() throws Exception {
 		MultiValueMap<String, String> testAccount = new LinkedMultiValueMap<>();
 
 		testAccount.add("memberId", "test");
