@@ -8,21 +8,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.LinkedHashMap;
 import java.util.Random;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pjc.notepad.member.service.dto.MemberDto;
 
-import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -69,28 +66,45 @@ class NotePadWebMvcTests {
 	}
 	@Test
 	void SignInAndLoginTest() throws Exception {
+		MemberDto memberDto = new MemberDto("test", "test", "test@mail.com", 1, 0, null, null);
+		memberDto = SignIn(memberDto);
+		memberDto = Login(memberDto);
+	}
+
+	MemberDto SignIn(MemberDto memberDto) throws Exception {
+
 		MultiValueMap<String, String> testAccount = new LinkedMultiValueMap<>();
 
-		testAccount.add("memberId", "test");
-		testAccount.add("memberPw", "test");
-		testAccount.add("memberMail", "test@test.com");
+		testAccount.add("memberId", memberDto.getMemberId());
+		testAccount.add("memberPw", memberDto.getMemberPw());
+		testAccount.add("memberMail", memberDto.getMemberMail());
 
 		this.mockMvc.perform(post("/member")
 			.params(testAccount))
 			.andExpect(status().isCreated());
 
+		return memberDto;
+	}
+
+	MemberDto Login(MemberDto memberDto) throws Exception {
 		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
 
-		login.add("memberId", "test");
-		login.add("memberPw", "test");
-		
+		login.add("memberId", memberDto.getMemberId());
+		login.add("memberPw", memberDto.getMemberPw());
+	
 		this.mockMvc.perform(post("/login")
 			.params(login))
 			.andExpect(status().isOk());
-
 		
+		return memberDto;
+	}
 
-		LOGGER.info("post test done!");
+	@Test
+	void NoteInsertTest() throws Exception {
+		MemberDto memberDto = new MemberDto("test", "test", "test@mail.com", 1, 0, null, null);
+		SignIn(memberDto);
+		Login(memberDto);
+		// TODO : NOTE INSERT 
 	}
 
 	public static String asJsonString(final Object obj) {
