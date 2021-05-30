@@ -1,5 +1,6 @@
 package com.pjc.notepad.member.service.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class MemberDto {
+public class MemberDto implements Serializable{
 
     private String memberId;
     private String memberPw;

@@ -12,6 +12,7 @@ import com.pjc.notepad.note.service.dto.NoteDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
@@ -52,13 +55,14 @@ public class NoteUserController {
     }
 
     @RequestMapping(value = "/note", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     public String insertNote(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
-            NoteDto note) {
+            NoteDto note, @SessionAttribute(name = "currentUser") MemberDto currentUser) {
         LOGGER.info("insertNote RemoteAddr : {} ", request.getRemoteAddr());
-        HttpSession session = request.getSession();
-        MemberDto loginUser = (MemberDto) session.getAttribute("currentUser");
+        // HttpSession session = request.getSession();
+        // MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
 
-        note.setMemberId(loginUser.getMemberId());
+        note.setMemberId(currentUser.getMemberId());
         note.setNoteStatus(1);
         note.setNoteLastUpdate(new Date());
         note.setNoteRegdate(new Date());
@@ -74,8 +78,8 @@ public class NoteUserController {
     @RequestMapping(value = "/note", method = RequestMethod.PUT)
     @ResponseBody
     public NoteDto NotePutApi(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes,
-            @RequestBody NoteDto noteDto, HttpSession session) {
-        MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
+            @RequestBody NoteDto noteDto, @SessionAttribute(name = "currentUser") MemberDto currentUser) {
+        //MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
         LOGGER.info("NoteDto.getNoteIdx : {}", noteDto.getNoteIdx());
         if (currentUser == null) {
             // something happens when you are not logged in
@@ -97,8 +101,8 @@ public class NoteUserController {
 
     @RequestMapping(value = "/note/{noteIdx}", method = RequestMethod.GET)
     public String NoteFormGet(Model model, @ModelAttribute("note") NoteDto noteDto, BindingResult bindingResult,
-            HttpSession session, @PathVariable("noteIdx") Integer noteIdx) {
-        MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
+            @SessionAttribute(name = "currentUser") MemberDto currentUser, @PathVariable("noteIdx") Integer noteIdx) {
+        //MemberDto currentUser = (MemberDto) session.getAttribute("currentUser");
         if (currentUser == null) {
             // you are not logged in
             return "redirect:/login";

@@ -20,19 +20,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@Slf4j
 class NotePadWebMvcTests {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private MockMvc mockMvc; 
+
+	protected MockHttpSession session;
 
 	@Test
 	void LoginGet() throws Exception {
@@ -87,12 +93,15 @@ class NotePadWebMvcTests {
 	}
 
 	MemberDto Login(MemberDto memberDto) throws Exception {
+		session = new MockHttpSession();
+
 		MultiValueMap<String, String> login = new LinkedMultiValueMap<>();
 
 		login.add("memberId", memberDto.getMemberId());
 		login.add("memberPw", memberDto.getMemberPw());
 	
 		this.mockMvc.perform(post("/login")
+			.session(session)
 			.params(login))
 			.andExpect(status().isOk());
 		
@@ -104,7 +113,18 @@ class NotePadWebMvcTests {
 		MemberDto memberDto = new MemberDto("test", "test", "test@mail.com", 1, 0, null, null);
 		SignIn(memberDto);
 		Login(memberDto);
-		// TODO : NOTE INSERT 
+
+		MultiValueMap<String, String> note = new LinkedMultiValueMap<>();
+		note.add("noteTitle", "테스트 제목");
+		note.add("noteContent", "테스트 내용");
+		
+		log.info("currentUser : {}", session.getAttribute("currentUser"));
+
+		this.mockMvc.perform((post("/note"))
+			.session(session)
+			.params(note))
+			.andExpect(status().isCreated());
+
 	}
 
 	public static String asJsonString(final Object obj) {
