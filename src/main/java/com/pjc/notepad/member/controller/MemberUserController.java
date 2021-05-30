@@ -54,7 +54,7 @@ public class MemberUserController {
 
         if (member != null) {
             LOGGER.info("result => {}", member.getMemberStatus());
-            request.getSession().setAttribute("currentUser", member.toString());
+            request.getSession().setAttribute("currentUser", member);
             msg = "성공적으로 로그인되었습니다. " + member.getMemberId() + "님.";
             returnTarget = "redirect:/note";
         } else {
